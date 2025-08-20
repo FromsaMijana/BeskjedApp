@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeskjedApp</title>
+  <link rel="stylesheet" href="style.css.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-container">
+  <div class="card">
+    <h1>Logg inn</h1>
+    <input type="text" id="username" placeholder="Brukernavn">
+    <input type="password" id="password" placeholder="Passord">
+    <button class="primary" onclick="login()">Logg inn</button>
+    <div id="login-error" class="error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-container" style="display:none;">
+
+  <header class="topbar">
+    <div>
+      <strong>Innlogget:</strong>
+      <img id="user-icon" class="user-icon" src="icons/default.png" alt="Bruker ikon">
+      <span id="whoami"></span>
+    </div>
+    <div class="nav">
+      <select id="nav-select" onchange="navigate()">
+        <option value="info-page">Informasjon</option>
+        <option value="messages-page">Beskjeder</option>
+        <option value="arrangementer-page">Arrangementer</option>
+        <option value="users-page">Brukere</option>
+      </select>
+      <button class="ghost" onclick="logout()">Logg ut</button>
+    </div>
+  </header>
+
+  <!-- INFORMASJON -->
+  <section id="info-page" class="page">
+    <div class="card">
+      <h2><img src="icons/info.png" class="section-icon" alt="">Informasjon</h2>
+      <p>Velkommen! Bruk menyen for å navigere.</p>
+    </div>
+  </section>
+
+  <!-- BESKJEDER -->
+  <section id="messages-page" class="page" style="display:none;">
+    <div class="card">
+      <h2><img src="icons/messages.png" class="section-icon" alt="">Beskjeder</h2>
+      <div class="row">
+        <div class="col">
+          <textarea id="message-text" placeholder="Skriv en beskjed..."></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Startdato</label>
+          <input type="date" id="start-date">
+        </div>
+        <div class="col">
+          <label>Sluttdato</label>
+          <input type="date" id="end-date">
+        </div>
+      </div>
+      <button class="primary" id="send-btn" onclick="sendMessage()">Send</button>
+      <div id="form-error" class="error"></div>
+    </div>
+
+    <ul id="messages-list" class="messages"></ul>
+  </section>
+
+  <!-- ARRANGEMENTER -->
+  <section id="arrangementer-page" class="page" style="display:none;">
+    <div class="card">
+      <h2><img src="icons/arrangement.png" class="section-icon" alt="">Arrangementer</h2>
+      <p>Her kan du legge til og se arrangementer. (Funksjonalitet kan utvides videre.)</p>
+    </div>
+  </section>
+
+  <!-- BRUKERE / ADMIN -->
+  <section id="users-page" class="page" style="display:none;">
+    <div class="card">
+      <h2><img src="icons/work.png" class="section-icon" alt="">Brukeradministrasjon</h2>
+
+      <!-- PAKKER -->
+      <div class="row">
+        <div class="col">
+          <h3>Tilgangspakker</h3>
+          <div class="row">
+            <div class="col">
+              <input id="pkg-name" type="text" placeholder="Navn på pakke">
+            </div>
+            <div class="col">
+              <select id="pkg-perms" multiple size="8" title="Velg rettigheter i pakken">
+                <!-- fylles fra JS -->
+              </select>
+            </div>
+          </div>
+          <button class="secondary" onclick="savePackage()">Lagre pakke</button>
+          <div class="meta" id="pkg-msg"></div>
+          <hr>
+          <h4>Eksisterende pakker</h4>
+          <ul id="pkg-list" class="messages"></ul>
+        </div>
+
+        <!-- NY BRUKER -->
+        <div class="col">
+          <h3>Ny bruker</h3>
+          <div class="row">
+            <div class="col"><input id="nu-first" type="text" placeholder="Fornavn *"></div>
+            <div class="col"><input id="nu-last" type="text" placeholder="Etternavn *"></div>
+          </div>
+          <div class="row">
+            <div class="col"><input id="nu-email" type="text" placeholder="E-post *"></div>
+            <div class="col"><input id="nu-phone" type="text" placeholder="Telefon *"></div>
+          </div>
+          <div class="row">
+            <div class="col"><input id="nu-username" type="text" placeholder="Brukernavn"></div>
+            <div class="col"><input id="nu-password" type="text" placeholder="Passord"></div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label>Tilgangspakke</label>
+              <select id="nu-package"><option value="">(ingen)</option></select>
+            </div>
+            <div class="col">
+              <label>Kan administrere brukere</label>
+              <input id="nu-canmanage" type="checkbox">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label>Ekstra rettigheter</label>
+              <div id="nu-perms" class="perm-grid"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label>Profilbilde (valgfritt)</label>
+              <input id="nu-avatar" type="file" accept="image/*">
+            </div>
+          </div>
+          <button class="primary" onclick="createUser()">Registrer bruker</button>
+          <div class="error" id="nu-error"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Eksisterende brukere</h3>
+      <ul id="users-list" class="messages"></ul>
+    </div>
+  </section>
+
+</div>
+
+<!-- BEKREFT SLETTING -->
+<div id="confirm-overlay" class="overlay" style="display:none;">
+  <div class="modal">
+    <p>Er du sikker på at du vil slette denne beskjeden?</p>
+    <div class="buttons">
+      <button class="ghost" onclick="closeConfirm()">Avbryt</button>
+      <button id="confirm-delete-btn" class="danger">Slett</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANGLER TILGANG -->
+<div id="noaccess-overlay" class="overlay" style="display:none;">
+  <div class="modal">
+    <h3>Mangler tilgang</h3>
+    <p>Du mangler tilganger til dette. Kontakt din nærmeste leder for videre hjelp.</p>
+    <div class="buttons"><button class="primary" onclick="closeNoAccess()">Ok</button></div>
+  </div>
+</div>
+
+<script type="module" src="app.js.js"></script>
+
+<script>
+  // Ikon-setter (beholder fra før)
+  const userIcon = document.getElementById("user-icon");
+  function setUserIcon(username){
+    const lower = (username||"").toLowerCase();
+    if(lower.includes("avarn")) userIcon.src = "icons/avarn.png";
+    else if(lower.includes("malling")) userIcon.src = "icons/malling.png";
+    else if(lower === "admin") userIcon.src = "icons/work.png";
+    else userIcon.src = "icons/default.png";
+  }
+
+  // Hook inn etter login i app.js
+  const originalLogin = window.login;
+  window.login = async function() {
+    await originalLogin();
+    if(window.currentUser){
+      setUserIcon(window.currentUser.username);
+    }
+  }
+</script>
+
+</body>
+</html>

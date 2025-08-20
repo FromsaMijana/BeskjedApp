@@ -1,0 +1,182 @@
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; 
+  font-family: Arial, sans-serif; 
+  background: #f5f6fa; 
+  color: #222;
+  display: flex; 
+  flex-direction: column;
+}
+
+/* --- Bare login vises midtstilt --- */
+#login-container {
+  margin: auto;                 /* sentrer på siden */
+  width: 100%; 
+  max-width: 560px;
+  text-align: center;
+}
+
+/* --- Når appen er synlig, flytt layouten “opp” og normaliser bredde --- */
+#app-container {
+  width: min(960px, 100%);
+  margin: 24px auto;            /* margin topp/bunn og sentrert */
+  padding: 0 12px;
+}
+
+.card {
+  background: #fff; 
+  border-radius: 16px; 
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+#login-container input, 
+textarea, 
+input[type="date"],
+input[type="text"],
+input[type="file"],
+select {
+  width: 100%; 
+  padding: 12px; 
+  margin: 8px 0; 
+  border: 1px solid #ddd; 
+  border-radius: 10px;
+}
+
+.primary {
+  width: 100%; 
+  padding: 12px; 
+  border: none; 
+  border-radius: 10px; 
+  cursor: pointer;
+  background: #2563eb; 
+  color: #fff; 
+  font-weight: 600;
+}
+.ghost { 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  border: 1px solid #999; 
+  background: #fff; 
+  cursor: pointer; 
+}
+.danger { 
+  padding: 8px 16px; 
+  border: none; 
+  border-radius: 8px; 
+  background: #e11d48; 
+  color: #fff; 
+  cursor: pointer; 
+}
+.secondary {
+  padding: 8px 16px; 
+  border: 1px solid #999; 
+  border-radius: 8px; 
+  background: #fff; 
+  cursor: pointer;
+}
+
+.error { 
+  color: #b91c1c; 
+  margin-top: 8px; 
+}
+
+.topbar {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  margin-bottom: 16px;
+}
+.nav { 
+  display: flex; 
+  gap: 8px; 
+  align-items: center; 
+}
+.page { margin-top: 8px; }
+
+.row { 
+  display: flex; 
+  gap: 12px; 
+  margin: 10px 0; 
+}
+.col { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+}
+textarea { min-height: 80px; }
+
+.messages { 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+}
+.message {
+  border: 1px solid #e5e7eb; 
+  background: #fff; 
+  border-radius: 12px; 
+  padding: 12px;
+  display: grid; 
+  grid-template-columns: 1fr auto; 
+  gap: 6px;
+}
+.meta { font-size: 12px; color: #555; }
+.actions { 
+  display: flex; 
+  gap: 8px; 
+  align-items: center; 
+}
+.badge {
+  display: inline-block; 
+  padding: 2px 8px; 
+  border-radius: 999px; 
+  background: #eef2ff; 
+  color: #3730a3; 
+  font-size: 12px;
+}
+
+/* Popup */
+.overlay {
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,.35); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+}
+.modal {
+  background: #fff; 
+  border-radius: 14px; 
+  padding: 20px; 
+  max-width: 520px; 
+  width: 100%; 
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+.modal .buttons { 
+  display: flex; 
+  justify-content: flex-end; 
+  gap: 8px; 
+  margin-top: 12px; 
+}
+
+/* === Ikoner for bruker og seksjoner === */
+.user-icon, .section-icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* Små hjelpekontroller i admin */
+.perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+.check { display:flex; align-items:center; gap:6px; font-size:14px; }
+
+/* Litt bedre opplevelse på små skjermer */
+@media (max-width: 480px) {
+  .row { flex-direction: column; }
+}

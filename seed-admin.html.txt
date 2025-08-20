@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Seed Admin</title>
+  <style> body{font-family:Arial,sans-serif;max-width:720px;margin:40px auto;padding:0 16px} .ok{color:green}.err{color:#b91c1c} code{background:#f5f6fa;padding:2px 6px;border-radius:6px} </style>
+</head>
+<body>
+  <h1>Opprett/oppdater admin-bruker</h1>
+  <p>Trykk på knappen under én gang for å legge inn <code>admin / Admin1996</code> i Firestore.</p>
+  <button id="seed" style="padding:10px 14px;border:1px solid #999;border-radius:8px;cursor:pointer">Opprett admin</button>
+  <pre id="out"></pre>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+    // Samme config som i appen
+    const firebaseConfig = {
+      apiKey: "AIzaSyCIpIWcUGuHIMWM8gXYnyY8-crXNrC5HwI",
+      authDomain: "beskjedapp.firebaseapp.com",
+      projectId: "beskjedapp",
+      storageBucket: "beskjedapp.firebasestorage.app",
+      messagingSenderId: "931659490429",
+      appId: "1:931659490429:web:4068a43ae6d5dc8d273d14",
+      measurementId: "G-82PCVFDZ3L"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    const PERMS = [
+      "view_info",
+      "view_messages","add_message","delete_message",
+      "view_arrangements","add_arrangement",
+      "manage_users"
+    ];
+
+    const btn = document.getElementById('seed');
+    const out = document.getElementById('out');
+
+    btn.onclick = async () => {
+      try {
+        await setDoc(doc(db,"users","admin"), {
+          username: "admin",
+          password: "Admin1996",        // kan ikke endres (i UI)
+          firstName: "System",
+          lastName: "Administrator",
+          email: "admin@example.com",
+          phone: "00000000",
+          displayName: "Administrator",
+          system: true,                 // kan ikke slettes (i UI)
+          canManageUsers: true,
+          permissions: PERMS,           // full tilgang
+          createdAt: serverTimestamp()
+        }, { merge: true });            // oppdater hvis finnes
+        out.className="ok";
+        out.textContent = "✅ Admin er opprettet/oppdatert. Gå tilbake til hovedsiden og logg inn med admin / Admin1996.";
+      } catch (e) {
+        out.className="err";
+        out.textContent = "❌ Feil: " + e.message;
+        console.error(e);
+      }
+    };
+  </script>
+</body>
+</html>
